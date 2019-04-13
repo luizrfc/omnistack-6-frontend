@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import api from '../../services/api'
 
-import './styles.css';
 import logo from '../../assets/logo.svg'
+
+import Styled from './styles'
 
 export default class Main extends Component {
     state = {
@@ -24,13 +25,13 @@ export default class Main extends Component {
     render() {
         const { title } = this.state
         return (
-            <div id="main-container">
+            <Styled color='#FFF'>
                 <form onSubmit={this.handleSubmit}>
                     <img src={logo} alt="" />
                     <input placeholder="Criar box" value={title} onChange={this.handleInputChange}></input>
                     <button type="submit">Criar</button>
                 </form>
-            </div>
+            </Styled>
         );
     }
 }

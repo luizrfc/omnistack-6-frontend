@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { MdInsertDriveFile } from 'react-icons/md'
-import { distanceInWords, format } from 'date-fns'
+import { distanceInWords } from 'date-fns'
 import pt from 'date-fns/locale/pt'
 
 import Dropzone from 'react-dropzone'
@@ -88,7 +88,7 @@ export default class Box extends Component {
 
             {box.files && box.files.map((file, index) => (
               <li key={index}>
-                <a className='fileInfo' href={file.url} target="_blank">
+                <a className='fileInfo' href={file.url} target="_new">
                   <MdInsertDriveFile size={24} color="#A5CFFF"></MdInsertDriveFile>
                   <strong>{file.title}</strong>
                 </a>
