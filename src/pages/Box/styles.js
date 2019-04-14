@@ -16,7 +16,7 @@ const Styled = styled.div`
     align-items: center;
 
     .hero{
-      width: 80%;
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
