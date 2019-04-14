@@ -68,8 +68,7 @@ const Styled = styled.div`
     list-style: none;
   }
   ul li {
-    // display: flex;
-    // justify-content: space-between;
+    border-radius: 10px;
     width: 100%;
     padding: 15px 0;
     float: left;
@@ -126,6 +125,30 @@ const Styled = styled.div`
 
   .loading-svg{
     margin-top: 50px;
+  }
+
+  .btn-action{
+    position: fixed;
+    width: 30px;
+    border-radius: 50%;
+    border: 0;
+    top: 10px;
+    text-align: center;
+    background: transparent;
+    color: ${colors.grayDark};
+    cursor: pointer;
+    &.right{
+      right: 30px;
+    }
+    &.left{
+      left: 30px;
+    }
+    &:hover{
+      color: ${colors.grayMedium};
+    }
+    &:disabled {
+      opacity: 0.2;
+    }
   }
 `;
 

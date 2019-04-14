@@ -34,7 +34,7 @@ const Styled = styled.div`
 
     button {
       height: 48px;
-      background: ${colors.blueDark};
+      background: ${colors.grayDark};
       color: #fff;
       font-weight: bold;
       font-size: 16px;
@@ -45,7 +45,7 @@ const Styled = styled.div`
       cursor: pointer;
       transition: 0.5s;
       &:hover{
-        background: #008bd4;
+        background: ${colors.grayMedium};
       }
       &:disabled {
         opacity: 0.2;
@@ -56,6 +56,25 @@ const Styled = styled.div`
   .loader-svg {
     position: absolute;
     margin-top: 72px;
+  }
+
+  .btn-action{
+    position: fixed;
+    width: 30px;
+    border-radius: 50%;
+    border: 0;
+    top: 10px;
+    right: 30px;
+    text-align: center;
+    background: transparent;
+    color: ${colors.grayDark};
+    cursor: pointer;
+    &:hover{
+      color: ${colors.grayMedium};
+    }
+    &:disabled {
+      opacity: 0.2;
+    }
   }
 `;
 

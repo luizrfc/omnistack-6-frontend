@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { MdInsertDriveFile } from 'react-icons/md'
+import { MdInsertDriveFile, MdMenu, MdChevronLeft } from 'react-icons/md'
 import { FaTrashAlt, FaAngleLeft } from 'react-icons/fa'
 import { distanceInWords } from 'date-fns'
 import pt from 'date-fns/locale/pt'
@@ -15,6 +15,7 @@ import api from '../../services/api'
 import socket from 'socket.io-client'
 
 import Feedback from '../../componets/feedback'
+import NavSide from '../../componets/navSide'
 
 export default class Box extends Component {
   constructor(props) {
@@ -30,10 +31,16 @@ export default class Box extends Component {
         type: 'success',
         time: 2000,
         display: true
+      },
+      navSide: {
+        box: false,
+        file: false,
+        data: []
       }
     }
     this.showFeedback = this.showFeedback.bind(this)
     this.hideFeedback = this.hideFeedback.bind(this)
+    this.navSideControl = this.navSideControl.bind(this)
   }
 
   async showFeedback(message, type) {
@@ -49,7 +56,27 @@ export default class Box extends Component {
     }, () => console.log('showFeedback', this.state.feedback))
   }
 
-  hideTime () {
+  closeNavSide() {
+    setTimeout(() => {
+      this.navSideControl('box')
+    }, 2000)
+  }
+
+  navSideControl = (nav) => {
+    console.log('SIDE', nav)
+    let sideBox = (nav === 'box') ? !this.state.navSide.box : false
+    let sideFile = (nav === 'file') ? !this.state.navSide.file : false
+    this.setState({
+      ...this.state,
+      navSide: {
+        ...this.state.navSide,
+        box: sideBox,
+        file: sideFile
+      }
+    })
+  }
+
+  hideTime() {
     console.log('****HIDE****')
     setTimeout(() => {
       this.hideFeedback()
@@ -71,8 +98,20 @@ export default class Box extends Component {
     const response = await api.get(`boxes/${box}`)
     console.log('response', response)
     this.setState({
+      ...this.state,
       loading: false,
       box: response.data
+    })
+
+    let lstBox = await api.get('/boxes/all')
+    console.log('lstBox', lstBox)
+    this.setState({
+      ...this.state,
+      navSide: {
+        ...this.state.navSide,
+        box: false,
+        data: lstBox.data
+      }
     })
   }
 
@@ -120,14 +159,14 @@ export default class Box extends Component {
 
   handleRemove = async (fileId) => {
     let result = await api.delete(`files/${fileId}`)
-    if(result.status === 200){
+    if (result.status === 200) {
       let fileIndex = 0
       this.showFeedback('Arquivo removido com sucesso', 'alert')
       let files = this.state.box.files
-      files.map((item,index) => {
-        if(item._id === fileId) fileIndex = index
+      files.map((item, index) => {
+        if (item._id === fileId) fileIndex = index
       })
-      files.splice(fileIndex,1)
+      files.splice(fileIndex, 1)
       this.setState({
         ...this.state,
         box: {
@@ -135,7 +174,7 @@ export default class Box extends Component {
           files: files
         }
       })
-    }else{
+    } else {
       this.showFeedback('Não foi possível remover o arquivo', 'danger')
     }
   }
@@ -145,11 +184,13 @@ export default class Box extends Component {
   }
 
   render() {
-    let { loading, box, feedback } = this.state
+    let { loading, box, feedback, navSide } = this.state
     return (
       <Styled>
+        <button onClick={this.btnBack} className='btn-action left'><MdChevronLeft size={36}></MdChevronLeft></button>
+        <button onClick={() => this.navSideControl('box')} className='btn-action right'><MdMenu size={36}></MdMenu></button>
+
         <header>
-          <button onClick={this.btnBack}><FaAngleLeft size={24} color='#FFF'></FaAngleLeft></button>
           <div className='hero'>
             <img src={logo} alt="" className='logo' />
             {!loading && <h1>{box.title}</h1>}
@@ -195,8 +236,9 @@ export default class Box extends Component {
           <img src={loader} alt="" />
         </div>}
 
-        {feedback.show && <Feedback message={feedback.message} type={feedback.type} func={this.hideFeedback} onload={this.hideTime}>
-        </Feedback>}
+        <NavSide show={navSide.box} title='Box' data={navSide.data} animate={false} width='500px' url='/box/[id]' close={this.navSideControl} sideName='box'></NavSide>
+
+        {feedback.show && <Feedback message={feedback.message} type={feedback.type} func={this.hideFeedback} onload={this.hideTime}></Feedback>}
       </Styled >
     );
   }
